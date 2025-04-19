@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TWINS DESING-HOMEPAGE</title>
+        <link rel="website icon" type="png"
+        href="Neue Machina.png">
+
+        
+
+        
+      
+    </head>
+
+    <body class="spaghetis-p-a-g-h-e-ti">
+      
+        <h1 class="main-text fade-in">desing
+            <br>
+            NOT BORING
+        </h1>
+       
+         <img src="Untitled design.png">
+          <div class="background"></div>
+  
+          
+    </body>
+
+    <style>
+        img{
+            mix-blend-mode: color-burn;
+            height: 300px;
+            
+        }
+
+       
+        .fade-in {
+  opacity: 0;
+  animation: fadeIn 2s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+        .main-text{
+            font-family: Arial, Helvetica, sans-serif;
+            letter-spacing: -2px;
+            color:white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+             height: 100vh;
+             margin: 0;
+            color: white;
+            text-align: center;
+            font-size: 3em;
+        }
+    
+
+.spaghetis-p-a-g-h-e-ti{
+    z-index: -1;
+    background-color: black;
+    
+}
+
+.background{
+    z-index: -1;
+    position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url(image-mesh-gradient.png) no-repeat center center/cover;
+      animation: fadein 5s ease-in-out forwards;
+      z-index: -1; /* behind your content */
+}
+@keyframes fadein {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+
+.nav-links::after{
+    transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+
+}
+
+
+       
+
+
+
+
+    </style>
+
+</html>
