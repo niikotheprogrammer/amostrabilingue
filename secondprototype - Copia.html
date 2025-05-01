@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>O aumento do nivel do mar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: linear-gradient(to top, #1e3c72, #2a5298);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+    }
+
+    .logo img {
+      height: 60px;
+    }
+
+    .platform-selector {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      z-index: 5;
+    }
+
+    .platform-selector h2 {
+      margin-bottom: 20px;
+    }
+
+    .platform-selector button {
+      margin: 10px;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #fff;
+      background-color: #007bff;
+    }
+
+    .container {
+      display: none;
+      position: relative;
+      text-align: center;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 600px;
+      z-index: 1;
+    }
+
+    .question {
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: #fff;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .button {
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      color: #fff;
+    }
+
+    .button.true {
+      background-color: #28a745;
+    }
+
+    .button.false {
+      background-color: #dc3545;
+    }
+
+    .button:hover {
+      transform: scale(1.1);
+      opacity: 0.9;
+    }
+
+    .character {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 60px;
+      background-color: #3498db;
+      border-radius: 50%;
+      transition: transform 1s ease, width 0.5s ease, height 0.5s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      color: white;
+      font-weight: bold;
+      z-index: 3;
+    }
+
+    .check-symbol {
+      font-size: 36px;
+    }
+
+    .sea {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, #0277bd, #0288d1);
+      z-index: 0;
+      animation: seaWaves 3s infinite alternate;
+    }
+
+    @keyframes seaWaves {
+      0% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(-30px);
+      }
+      100% {
+        transform: translateX(30px);
+      }
+    }
+
+    .sea-level {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 0px;
+      background: rgba(0, 0, 255, 0.5);
+      transition: height 1s linear;
+      z-index: 1;
+    }
+
+    .tv {
+      display: none;
+      background-color: #2270ff;
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 30px;
+    }
+
+    .message {
+      font-size: 1.5rem;
+      margin-top: 20px;
+      color: #fff;
+    }
+
+    .timer {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      color: #fff;
+    }
+
+    #game-over {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.85);
+      padding: 40px;
+      color: white;
+      font-size: 2rem;
+      border-radius: 20px;
+      text-align: center;
+      z-index: 10;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <img src="logoimage.png" alt="Game Logo" style="width: 150px; height: 150px;">
+  </div>
+  <div class="platform-selector" id="platform-selector">
+    <h2>Choose your platform:</h2>
+    <button onclick="startGame('mobile')">Mobile</button>
+    <button onclick="startGame('desktop')">Desktop</button>
+  </div>
+  <div class="sea"></div>
+  <div class="sea-level" id="sea-level"></div>
+  <div id="game-over">
+    🌊 <strong>Game Over!</strong><br>o mar subiu demais!<br><br>
+    <button onclick="location.reload()" style="padding: 10px 20px; font-size: 1rem; border: none; border-radius: 8px; background-color: #00bcd4; color: white; cursor: pointer;">Restart</button>
+  </div>
+  <div class="container" id="game-container">
+    <div id="quiz"></div>
+    <div class="tv" id="tv">
+      <h2 id="tv-question"></h2>
+      <p id="tv-answer"></p>
+    </div>
+    <div id="answer" class="answer"></div>
+    <div id="buttons" class="buttons"></div>
+    <div class="timer" id="timer"></div>
+    <div class="message" id="score-message"></div>
+  </div>
+  <div class="character" id="character"></div>
+  <script>
+    const questions = [
+      { question: "Os Humanos tem culpa pelo aumento do nivel do mar?", answer: true },
+      { question: "O mar aumenta por causa das geleiras?", answer: true },
+      { question: "O aquecimento global tem algo com o aumento do nivel do mar?", answer: true },
+      { question: "A natureza e a pricipal responsavel pelo o aumento do nivel do mar?", answer: false },
+      { question: "Is the sun a star?", answer: true },
+      { question: "Can fish live out of water?", answer: false },
+      { question: "Is Python a programming language?", answer: true },
+      { question: "Is the moon made of cheese?", answer: false },
+      { question: "Do birds fly?", answer: true },
+      { question: "Is water a solid at room temperature?", answer: false }
+    ];
+
+    let currentQuestionIndex = 0;
+    let seaHeight = 0;
+    let platform = '';
+    let globalTime = 25;
+    let globalTimer;
+    let score = 0;
+    let gameEnded = false;
+
+    const character = document.getElementById('character');
+    const seaLevel = document.getElementById('sea-level');
+    const tv = document.getElementById('tv');
+    const tvQuestion = document.getElementById('tv-question');
+    const tvAnswer = document.getElementById('tv-answer');
+    const timerDisplay = document.getElementById('timer');
+    const gameOverScreen = document.getElementById('game-over');
+    const scoreMessage = document.getElementById('score-message');
+
+    function startGame(selectedPlatform) {
+      platform = selectedPlatform;
+      document.getElementById('platform-selector').style.display = 'none';
+      document.getElementById('game-container').style.display = 'block';
+      loadQuestion();
+      startGlobalTimer();
+    }
+
+    function startGlobalTimer() {
+      globalTimer = setInterval(() => {
+        globalTime--;
+        seaHeight += 15;
+        seaLevel.style.height = seaHeight + 'px';
+        timerDisplay.textContent = `Time left: ${globalTime} seconds`;
+
+        if (globalTime <= 0 || seaHeight >= window.innerHeight - 100) {
+          clearInterval(globalTimer);
+          gameEnded = true;
+          showGameOver();
+          document.getElementById('buttons').innerHTML = '';
+        }
+      }, 1000);
+    }
+
+    function checkAnswer(selectedAnswer) {
+      const correctAnswer = questions[currentQuestionIndex].answer;
+      const result = selectedAnswer === correctAnswer ? 'Correct!' : 'Incorrect!';
+      if (platform === 'mobile') {
+        document.getElementById('answer').textContent = '';
+        tvAnswer.textContent = `The correct answer is: ${correctAnswer}`;
+      } else {
+        document.getElementById('answer').textContent = result;
+      }
+      if (result === 'Correct!') score++;
+      moveCharacter(result);
+      currentQuestionIndex++;
+
+      setTimeout(() => {
+        if (currentQuestionIndex < questions.length) {
+          loadQuestion();
+        } else {
+          gameEnded = true;
+          clearInterval(globalTimer);
+          showGameOver();
+        }
+      }, 1500);
+    }
+
+    function showGameOver() {
+      scoreMessage.textContent = `Your score: ${score} / ${questions.length}`;
+      if (globalTime <= 0) {
+        gameOverScreen.style.display = 'block';
+      }
+    }
+
+    function loadQuestion() {
+      const question = questions[currentQuestionIndex];
+      if (!question) return;
+
+      document.getElementById('quiz').innerHTML = `<div class="question">${question.question}</div>`;
+      document.getElementById('answer').innerHTML = '';
+
+      if (platform === 'mobile') {
+        document.getElementById('buttons').innerHTML = `
+          <button class="button true" onclick="checkAnswer(true)">True</button>
+          <button class="button false" onclick="checkAnswer(false)">False</button>
+        `;
+        tv.style.display = 'none';
+      } else {
+        document.getElementById('buttons').innerHTML = '';
+        tv.style.display = 'block';
+        tvQuestion.textContent = question.question;
+        tvAnswer.textContent = 'Waiting for answer...';
+      }
+    }
+
+    function moveCharacter(result) {
+      if (result === 'Correct!') {
+        character.style.transform = 'translateX(-50%) translateY(-100px)';
+        character.style.backgroundColor = '#4CAF50';
+        character.innerHTML = '<span class="check-symbol">✔</span>';
+        character.style.fontSize = '30px';
+        character.style.width = '80px';
+        character.style.height = '80px';
+      } else {
+        character.style.transform = 'translateX(-50%) translateY(-60px)';
+        character.style.backgroundColor = '#f44336';
+        character.innerHTML = '<span class="check-symbol">✖</span>';
+        character.style.fontSize = '30px';
+        character.style.width = '70px';
+        character.style.height = '70px';
+      }
+
+      setTimeout(() => {
+        character.style.transform = 'translateX(-50%) translateY(0)';
+        character.style.backgroundColor = '#3498db';
+        character.innerHTML = '';
+        character.style.fontSize = '24px';
+        character.style.width = '60px';
+        character.style.height = '60px';
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
